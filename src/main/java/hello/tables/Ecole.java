@@ -26,31 +26,42 @@ import javax.persistence.Version;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity(name="ecole")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Ecole implements Serializable {
 
-    /** Primary key. */
-
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/** Primary key. */
+	/** Primary key. */
+    protected static final String PK = "id";
 	
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(unique=true, nullable=false, precision=11)
     private int id;
-    @Column(name="commentaire_recule", nullable=true, length=255)
+    @Column(name="nom", nullable=false, length=255)
     private String nom;
+    
+    @Column(name="update_key", nullable=true, length=255)
+    private String key;
 
-    @JsonBackReference(value="activite")
+//    @JsonBackReference (value="EcoleContenus")
     @OrderBy("date ASC")
     @OneToMany(mappedBy="ecole",cascade =CascadeType.ALL,orphanRemoval = true)
     private Set<Contenus> contenus;
     
-    @JsonBackReference(value="ecole")
-    @OneToMany(fetch = FetchType.LAZY,mappedBy="ecole",cascade = CascadeType.ALL,orphanRemoval = true)
+  
+    @OneToMany(mappedBy="ecole",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Utilisateur> utilisateur;
+    
 
     /** Default constructor. */
     public Ecole() {
@@ -68,7 +79,19 @@ public class Ecole implements Serializable {
         return id;
     }
 
-    /**
+    public String getKey() {
+		return key;
+	}
+
+
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+
+
+	/**
      * Setter method for id.
      *
      * @param aId the new value for id
@@ -77,42 +100,20 @@ public class Ecole implements Serializable {
         id = aId;
     }
 
-    /**
-     * Access method for commentaireRecule.
-     *
-     * @return the current value of commentaireRecule
-     */
-    public String getCommentaireRecule() {
+    public String getNom() {
         return nom;
     }
 
-    /**
-     * Setter method for commentaireRecule.
-     *
-     * @param aCommentaireRecule the new value for commentaireRecule
-     */
-    public void setCommentaireRecule(String aCommentaireRecule) {
-        nom = aCommentaireRecule;
+
+    public void setNom(String anom) {
+        nom = anom;
     }
 
-   
 
-
-
-    /**
-     * Access method for activite.
-     *
-     * @return the current value of activite
-     */
     public Set<Contenus> getContenus() {
         return contenus;
     }
 
-    /**
-     * Setter method for activite.
-     *
-     * @param aActivite the new value for activite
-     */
     public void setContenus(Set<Contenus> contenus) {
         this.contenus = contenus;
     }
@@ -122,21 +123,11 @@ public class Ecole implements Serializable {
     }
 
 
-
-    /**
-     * Access method for utilisateur.
-     *
-     * @return the current value of utilisateur
-     */
     public Set<Utilisateur> getUtilisateurs() {
         return utilisateur;
     }
 
-    /**
-     * Setter method for utilisateur.
-     *
-     * @param aUtilisateur the new value for utilisateur
-     */
+
     public void setUtilisateur( Set<Utilisateur> aUtilisateur) {
         utilisateur = aUtilisateur;
     }
@@ -147,14 +138,6 @@ public class Ecole implements Serializable {
     
    
 
-
-    
-    /**
-     * Compares the key for this instance with another Voyage.
-     *
-     * @param other The object to compare to
-     * @return True if other object is instance of class Voyage and the key objects are equal
-     */
     private boolean equalKeys(Object other) {
         if (this==other) {
             return true;
@@ -169,23 +152,13 @@ public class Ecole implements Serializable {
         return true;
     }
 
-    /**
-     * Compares this instance with another Voyage.
-     *
-     * @param other The object to compare to
-     * @return True if the objects are the same
-     */
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Ecole)) return false;
         return this.equalKeys(other) && ((Ecole)other).equalKeys(this);
     }
 
-    /**
-     * Returns a hash code for this instance.
-     *
-     * @return Hash code
-     */
+
     @Override
     public int hashCode() {
         int i;

@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -24,15 +25,23 @@ import javax.persistence.Version;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 @Entity(name="utilisateur")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Utilisateur implements Serializable {
 
-    /** Primary key. */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+	/** Primary key. */
     protected static final String PK = "id";
 
 
@@ -42,7 +51,7 @@ public class Utilisateur implements Serializable {
     private int id;
   
     @Column(nullable=false, length=40)
-    private String email;
+    private String login;
 
     @Column(nullable=false, length=20)
     private String nom;
@@ -51,8 +60,8 @@ public class Utilisateur implements Serializable {
 //    private String role;
     
     
-    @JsonIgnore
-    @Column(nullable=false, length=30)
+   
+    @Column(nullable=false, length=200)
     private String password;
 
 // 
@@ -63,41 +72,15 @@ public class Utilisateur implements Serializable {
     @Column(nullable=false, length=20)
     private String prenom;
     
-    
-//    @Column(name="nb_amis",nullable=true, length=2)
-//    private int nbamis; 
-//    
-//    
-//
-//    @Column(name="nbdemandes_amis")
-//    private int nbDemandesAmis;
-
-   
-//      
-//   
-//    @OneToMany(fetch = FetchType.LAZY,mappedBy="utilisateur",cascade=CascadeType.ALL,orphanRemoval = true)
-//    @JsonIgnore private Set<Commentaires> commentaires;
-//    
-//   
-//   
-//    @OneToMany(fetch = FetchType.LAZY,mappedBy="utilisateur",cascade=CascadeType.ALL,orphanRemoval = true)
-//    @JsonIgnore private Set<Likes> likes;
-//   
-//
-//    
-//    @OrderBy("date DESC")
-//    @JsonBackReference(value="notification")
-//    @OneToMany(mappedBy="utilisateur",cascade=CascadeType.ALL,orphanRemoval = true)
-//    private Set<Notifications> notifications;
-//    
-    
+//    @JsonManagedReference(value="UtilisateurEcole")
     @OrderBy("dateDebut DESC")
-    @ManyToOne( optional = false,cascade=CascadeType.REMOVE)
-    @JsonManagedReference(value="ecole") private Ecole ecole;
+    @ManyToOne( optional = false)
+    private Ecole ecole;
     
+//    @JsonBackReference  (value="UtilisateurContenus")
     @OrderBy("date DESC")
-    @OneToMany(fetch = FetchType.LAZY,mappedBy="utilisateur",cascade = CascadeType.ALL,orphanRemoval = true)
-     private @JsonBackReference(value="contenus")  Set<Contenus> activite;
+    @OneToMany(mappedBy="utilisateur",cascade = CascadeType.ALL)
+    private   Set<Contenus> contenus;
     
 
     
@@ -110,37 +93,9 @@ public class Utilisateur implements Serializable {
     
     /** Default constructor. */
     public Utilisateur() {
-        super();
+    	super();
     }
-//    public int getnbDemandeAmis() {
-//    	return nbDemandesAmis;
-//    }
-//    public void setNbDemandeAMis(int nbdemandes) {
-//    	nbDemandesAmis = nbdemandes;
-//    }
-//
-//    public int getNbamis() {
-//    	return nbamis;
-//    }
-//    public void setNbamis(int anbamis) {
-//    	nbamis = anbamis;
-//    }
-         
-//     public String getRole() {
-//    	 return role;
-//     }
-//     
-//     public void setRole(String role) {
-//    	 this.role = role;
-//     }
-     
-//     public void setNbNotifications(int nbNotifications) {
-//    	 this.nbNotifications = nbNotifications;
-//     }
-//     
-//     public int getNbNotifications() {
-//    	 return nbNotifications;
-//     }
+
     /**
      * Access method for id.
      *
@@ -150,14 +105,7 @@ public class Utilisateur implements Serializable {
         return id;
     }
 
-//    
-//    public int getNbActivites() {
-//    	return nbActivites;
-//    }
-//    
-//    public void setNbActivites( int nbActivites) {
-//    	this.nbActivites = nbActivites;
-//    }
+
     
     /**
      * Setter method for id.
@@ -175,8 +123,8 @@ public class Utilisateur implements Serializable {
      *
      * @return the current value of email
      */
-    public String getEmail() {
-        return email;
+    public String getLogin() {
+        return login;
     }
 
     /**
@@ -184,8 +132,8 @@ public class Utilisateur implements Serializable {
      *
      * @param aEmail the new value for email
      */
-    public void setEmail(String aEmail) {
-        email = aEmail;
+    public void setLogin(String aEmail) {
+    	login = aEmail;
     }
 
 
@@ -226,30 +174,6 @@ public class Utilisateur implements Serializable {
     }
 
 
-
-    /**
-     * Access method for photoProfile.
-     *
-     * @return the current value of photoProfile
-     */
-//    public String getPhotoProfile() {
-//        return photoProfile;
-//    }
-//
-//    /**
-//     * Setter method for photoProfile.
-//     *
-//     * @param aPhotoProfile the new value for photoProfile
-//     */
-//    public void setPhotoProfile(String aPhotoProfile) {
-//        photoProfile = aPhotoProfile;
-//    }
-
-    /**
-     * Access method for prenom.
-     *
-     * @return the current value of prenom
-     */
     public String getPrenom() {
         return prenom;
     }
@@ -263,51 +187,9 @@ public class Utilisateur implements Serializable {
         prenom = aPrenom;
     }
 
-
-
- 
-//    public Set<DemandesAmis> getDemandesAmis() {
-//        return demandesAmis;
-//    }
-//
-//    /**
-//     * Setter method for bonplan.
-//     *
-//     * @param aBonplan the new value for bonplan
-//     */
-//    public void setDemandesAmis(Set<DemandesAmis> aDemandes) {
-//    	demandesAmis = aDemandes;
-//    }
-//
-//    /**
-//     * Access method for commentaires.
-//     *
-//     * @return the current value of commentaires
-//     */
-//    public Set<Commentaires> getCommentaires() {
-//        return commentaires;
-//    }
-//
-//    /**
-//     * Setter method for commentaires.
-//     *
-//     * @param aCommentaires the new value for commentaires
-//     */
-//    public void setCommentaires(Set<Commentaires> aCommentaires) {
-//        commentaires = aCommentaires;
-//    }
-//    
-//    public void setNotifications(Set<Notifications> notifications) {
-//        this.notifications = notifications;
-//    }
-//    
-//    public Set<Notifications> getNotifications( ) {
-//        return this.notifications;
-//    }
     
-    
-    public Set<Contenus> getActivite() {
-        return activite;
+    public Set<Contenus> getContenus() {
+        return contenus;
     }
 
     /**
@@ -315,46 +197,14 @@ public class Utilisateur implements Serializable {
      *
      * @param aActivite the new value for activite
      */
-    public void setActivite(Set<Contenus> aActivite) {
-        activite = aActivite;
+    public void setContenus(Set<Contenus> acontenus) {
+    	contenus = acontenus;
     }
 
     public void addActivite(Contenus activite) {
-    	this.getActivite().add(activite);
+    	this.getContenus().add(activite);
     }
     
-    
-//    public void addNotifications(Notifications notifications) {
-//    	this.getNotifications().add(notifications);
-//    }
-//    
-//
-//
-//    
-//    public void addDemandeAmis(DemandesAmis demandeamis) {
-//    	this.getDemandesAmis().add(demandeamis);
-//    	
-//    }
-//
-//
-//    /**
-//     * Access method for likes.
-//     *
-//     * @return the current value of likes
-//     */
-//    public Set<Likes> getLikes() {
-//        return likes;
-//    }
-
-    /**
-     * Setter method for likes.
-     *
-     * @param aLikes the new value for likes
-     */
-//    public void setLikes(Set<Likes> aLikes) {
-//        likes = aLikes;
-//    }
-
 
     /**
      * Access method for voyage.
@@ -407,19 +257,7 @@ public class Utilisateur implements Serializable {
         return this.equalKeys(other) && ((Utilisateur)other).equalKeys(this);
     }
 
-    /**
-     * Returns a hash code for this instance.
-     *
-     * @return Hash code
-     */
-    @Override
-    public int hashCode() {
-        int i;
-        int result = 17;
-        i = getId();
-        result = 37*result + i;
-        return result;
-    }
+
 
     /**
      * Returns a debug-friendly String representation of this instance.

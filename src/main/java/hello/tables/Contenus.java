@@ -25,19 +25,28 @@ import javax.persistence.Version;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 @Entity(name="contenus")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Contenus implements Serializable {
 
   
 	
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/** Primary key. */
+    protected static final String PK = "id";
+
+	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(unique=true, nullable=false, precision=10)
     private int id;
@@ -46,52 +55,25 @@ public class Contenus implements Serializable {
     private Date date;
     @Column(nullable=false)
     private String content;
-//    @Column(nullable=false, precision=2)
-//    private int note;
-//    @Column(nullable=false, precision=2)
-//    private int flags;
-    
+
     @Column(nullable=false, length=255)
     private String titre;
     
     @Column(nullable=true, length=255)
     private String photo;
     
-        
-    @ManyToOne(optional=false,cascade = CascadeType.MERGE)
-    private  Utilisateur utilisateur;
+//    @JsonManagedReference(value="UtilisateurContenus") 
+    @ManyToOne(optional=false,cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+   private  Utilisateur utilisateur;
     
-//    @Column(name="nb_likes",nullable=true,length=3)
-//    private int nbLikes;
-//    @Column(name="nb_commentaires",nullable=true,length=3)
-//    private int nbCommentaires;
-    
-    @JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade=CascadeType.PERSIST)
-    private Ecole ecole;
-    
-//    @OrderBy("date ASC")
-//    @JsonIgnore
-//    @OneToMany(mappedBy="activite",fetch=FetchType.LAZY,cascade= CascadeType.ALL,orphanRemoval = true)
-//    private Set<Commentaires> commentaires;
-//    @JsonIgnore
-//    @OneToMany(fetch=FetchType.LAZY,mappedBy="activite",cascade=CascadeType.ALL,orphanRemoval = true)
-//    private Set<Likes> likes;
 
-  
     
-//    public int getFlags() {
-//        return flags;
-//    }
-//
-//    /**
-//     * Setter method for flags.
-//     *
-//     * @param aFlags the new value for flags
-//     */
-//    public void setFlags(int aFlags) {
-//        flags = aFlags;
-//    }
+//    @JsonManagedReference(value="EcoleContenus")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade=CascadeType.PERSIST)
+	  private Ecole ecole;
+
+
+
     
     
     
@@ -117,31 +99,7 @@ public class Contenus implements Serializable {
     	date = aDate;
     }
  
-//    public void addCommentaire(Commentaires commentaire) {
-//      	 
-//    	this.getCommentaires().add(commentaire);
-//    	
-//    }
-//    
-//    public void addLike(Likes like) {
-//     	 
-//    	this.getLikes().add(like);
-//    	
-//    }
-    
-//    public int getNbLikes() {
-//    	return nbLikes;
-//    }
-//    public void setNbLikes(int nbLikes) {
-//    	this.nbLikes = nbLikes;
-//    }
-//    
-//    public int getNbCommentaires() {
-//    	return nbCommentaires;
-//    }
-//    public void setNbCommentaires(int nbCommentaires) {
-//    	this.nbCommentaires = nbCommentaires;
-//    }
+
     
     public Utilisateur getUtilisateur() {
         return utilisateur;
@@ -248,41 +206,7 @@ public class Contenus implements Serializable {
         this.ecole = ecole;
     }
 
-    /**
-     * Access method for commentaires.
-     *
-     * @return the current value of commentaires
-     */
-//    public Set<Commentaires> getCommentaires() {
-//        return commentaires;
-//    }
-//
-//    /**
-//     * Setter method for commentaires.
-//     *
-//     * @param aCommentaires the new value for commentaires
-//     */
-//    public void setCommentaires(Set<Commentaires> aCommentaires) {
-//        commentaires = aCommentaires;
-//    }
-//
-//    /**
-//     * Access method for likes.
-//     *
-//     * @return the current value of likes
-//     */
-//    public Set<Likes> getLikes() {
-//        return likes;
-//    }
-//
-//    /**
-//     * Setter method for likes.
-//     *
-//     * @param aLikes the new value for likes
-//     */
-//    public void setLikes(Set<Likes> aLikes) {
-//        likes = aLikes;
-//    }
+
 
     /**
      * Compares the key for this instance with another Activite.
@@ -337,7 +261,7 @@ public class Contenus implements Serializable {
      */
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer("[Activite |");
+        StringBuffer sb = new StringBuffer("[Contenus |");
         sb.append(" id=").append(getId());
         sb.append("]");
         return sb.toString();

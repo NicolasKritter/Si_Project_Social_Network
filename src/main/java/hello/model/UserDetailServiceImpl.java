@@ -20,12 +20,12 @@ public class UserDetailServiceImpl implements UserDetailsService{
 	//Repository que j'ai créé qui va aller chercher les utilisateurs dans la DB
 	private  UtilisateurRepository userDao;
 
-	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		Utilisateur user = userDao.findByEmail(userId);
+	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+		Utilisateur user = userDao.findByLogin(login);
 		if(user == null){
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority());
+		return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), getAuthority());
 	}
 //Ajoute les rôles  (Tu définis les rôles que tu veux, tu peux aussi mettre d'autres fonctions
 	//pour retourner les rôles selon certains critères

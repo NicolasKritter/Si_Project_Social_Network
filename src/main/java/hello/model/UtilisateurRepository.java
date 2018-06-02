@@ -10,7 +10,7 @@ import hello.tables.Utilisateur;
 
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long>   {
 
-	Utilisateur findByEmail(String email);
+	Utilisateur findByLogin(String login);
 	Utilisateur findById(int id);
 	Iterable<Utilisateur> findByNomAndPrenom(String nom,String prenom);
 	Iterable<Utilisateur> findByNomContainingOrPrenomContaining(String nom,String prenom);

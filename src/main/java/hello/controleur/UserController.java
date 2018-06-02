@@ -34,316 +34,18 @@ public class UserController {
 				// the data
 	private UtilisateurRepository userRepository;
 
-	// @Autowired
-	// private PasswordEncoder passwordEncoder;
+	
 
-	// @Autowired
-	// private TokenRepository tokenRepository;
-	//
-	// @Autowired
-	// private AmisRepository amisRepository;
-	// @Autowired
-	// private DemandeAmisRepository demandeAmisRepository;
 
-	// @Autowired
-	// private Websocket websocket = new Websocket();
-
-	// private EmailSender emailSender = new EmailSender();
-
-	// @Autowired
-	// private SimpMessagingTemplate template;
-
-	// @MessageMapping("/chat")
-	// @SendTo("/topic/messages")
-	// public String greet(String message) {
-	// String text = "[" + System.currentTimeMillis() + "]:" + message;
-	// return text;
-	// }
-	//
-	//
-	// @GetMapping(path = "/test")
-	// public String test(@RequestParam String message) {
-	//
-	// String text = "[" + System.currentTimeMillis() + "]:" + message;
-	// this.template.convertAndSend("/topic/messages",text);
-	// return text;
-	// }
-
-	// TODO save return the ID
-	// @GetMapping(path = "/add") // Map ONLY GET Requests
-	// public @ResponseBody Utilisateur addNewUser(@RequestParam String nom,
-	// @RequestParam String prenom, @RequestParam String email,
-	// @RequestParam String password,
-	//
-	// @RequestParam(required=false) String photoProfile, HttpServletRequest
-	// request,
-	// HttpServletResponse response
-	//
-	// ) throws IOException {
-	//
-	// if (userRepository.findByEmail(email) == null) {
-	//
-	// Utilisateur n = new Utilisateur();
-	// n.setNom(nom);
-	// n.setRole("user");
-	// n.setPrenom(prenom);
-	// n.setPassword(passwordEncoder.encode(password));
-	// n.setEmail(email);
-	// n.setPhotoProfile(photoProfile);
-	// userRepository.save(n);
-	// n= userRepository.save(n);
-	// Amis amis = new Amis();
-	// amis.setUtilisateur(n);
-	// Utilisateur viamigo =
-	// userRepository.findByEmail("julie-noel@viamigo.world");
-	// amis.setFriends(viamigo);
-	// if(viamigo!=null) {
-	// viamigo.setNbamis(viamigo.getNbamis()+1);
-	// n.setNbamis(1);
-	// amisRepository.save(amis);
-	// }
-	// HttpSession session = request.getSession();
-	// session.setAttribute("idUser", n.getId());
-	// session.setMaxInactiveInterval(3600);
-	// SecurityContextHolder.getContext().setAuthentication(
-	// new UsernamePasswordAuthenticationToken(
-	// n, null,
-	// Arrays.asList(new SimpleGrantedAuthority("New User"))));
-	// return n;
-	// } else {
-	//
-	// response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-	// "Email already exist");
-	// return null;
-	// }
-	// }
-
-	// @GetMapping(path = "/recherche/email")
-	// public @ResponseBody Utilisateur getfindUserEmail(
-	// @RequestParam String email, HttpServletRequest request,
-	// HttpServletResponse response) throws IOException {
-	// // This returns a JSON or XML with the users
-	// Utilisateur user = userRepository.findByEmail(email);
-	//
-	// if (user != null) {
-	// return user;
-	// } else {
-	// response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-	// return null;
-	// }
-	//
-	// }
-	// RandomGenerator randomGenerator = new RandomGenerator();
-	// @RequestMapping(path = "/signin/facebook",method = RequestMethod.POST)
-	// public @ResponseBody Utilisateur loginfcbk(
-	// @RequestParam(required=false) String email,
-	// @RequestParam(required=false) String token,
-	// HttpServletRequest request,
-	// HttpServletResponse response) throws IOException {
-	// // This returns a JSON or XML with the users
-	// if (email==null || email.equals("")) {
-	// response.sendError(HttpServletResponse.SC_BAD_REQUEST,"error3");
-	//
-	// return null;
-	// }
-	//
-	//// if (email!=null && token==null) {
-	//// Utilisateur user = userRepository.findByEmail(email);
-	//// HttpSession session = request.getSession();
-	//// session.setAttribute("idUser", user.getId());
-	//// session.setMaxInactiveInterval(3600);
-	//// SecurityContextHolder.getContext().setAuthentication(
-	//// new UsernamePasswordAuthenticationToken(
-	//// user, null,
-	//// Arrays.asList(new SimpleGrantedAuthority("FACEBOOK_USER"))));
-	//// return user;
-	//// }
-	//
-	//
-	// if (token!=null && token.length()>5) {
-	// String message = null;
-	//
-	// String urlFb =
-	// "https://graph.facebook.com/oauth/access_token?client_id=261099094402025&client_secret=3b9828d21e7af7ca323ec498237a27d1&grant_type=client_credentials";
-	//
-	// RestTemplate template = new RestTemplate();
-	// HttpEntity<String> res = template.exchange(urlFb, HttpMethod.GET, null,
-	// String.class);
-	//
-	// String resultString = res.getBody();
-	// ObjectMapper mapper = new ObjectMapper();
-	// JsonNode node = mapper.readTree(resultString);
-	// String fbToken= null;
-	// if (node.isObject()) {
-	// ObjectNode obj = (ObjectNode) node;
-	// fbToken = obj.get("access_token").asText();
-	// }
-	//
-	// if (fbToken==null) {
-	// response.sendError(HttpServletResponse.SC_BAD_REQUEST,"error bad token");
-	// return null;
-	// }
-	// String url =
-	// "https://graph.facebook.com/debug_token?input_token="+token+"&access_token="+fbToken;
-	//
-	// res = template.exchange(url, HttpMethod.GET, null, String.class);
-	// node = mapper.readTree(res.getBody());
-	//
-	// if (node.isObject()) {
-	// ObjectNode obj = (ObjectNode) node;
-	// if (obj.has("data") && obj.get("data").has("is_valid")) {
-	// message = obj.get("data").get("is_valid").asText();
-	// }
-	// }else {
-	// response.sendError(HttpServletResponse.SC_BAD_REQUEST,"error2a");
-	// return null;
-	// }
-	// //message="true";
-	//
-	// if (message!=null && message.equals("true")) {
-	// Utilisateur user = userRepository.findByEmail(email);
-	// if (user==null) {
-	// url =
-	// "https://graph.facebook.com/me?fields=id,last_name,first_name,picture&access_token="+token;
-	// res = template.exchange(url, HttpMethod.GET, null, String.class);
-	// node = mapper.readTree(res.getBody());
-	//
-	// if (node.isObject()) {
-	// ObjectNode obj = (ObjectNode) node;
-	// if (obj.has("id") ) {
-	// user = new Utilisateur();
-	// //user.setId(obj.get("id").asInt());
-	// user.setEmail(email);
-	// user.setNom(obj.get("last_name").asText());
-	// user.setPassword(passwordEncoder.encode(randomGenerator.generateString(8)));
-	// user.setPrenom(obj.get("first_name").asText());
-	// user.setPhotoProfile("https://graph.facebook.com/"+obj.get("id").asText()+"/picture");
-	// user.setRole("user");
-	// user.setNbamis(1);
-	// }else {
-	// response.sendError(HttpServletResponse.SC_BAD_REQUEST,"error getting
-	// facebook data to creat account");
-	// return null;
-	//// user = new Utilisateur();
-	//// user.setEmail("testfzefez");
-	//// user.setNom("nom");
-	//// user.setPrenom("reer");
-	//// user.setRole("user");
-	//// user.setPassword(passwordEncoder.encode("test"));
-	//// user.setNbamis(1);
-	// }
-	//
-	// }else {
-	// response.sendError(HttpServletResponse.SC_BAD_REQUEST,"error getting
-	// facebook data to creat account");
-	// return null;
-	//
-	// }
-	//
-	// user= userRepository.save(user);
-	// Amis amis = new Amis();
-	// amis.setUtilisateur(user);
-	// Utilisateur viamigo =
-	// userRepository.findByEmail("julie-noel@viamigo.world");
-	// amis.setFriends(viamigo);
-	// if(viamigo!=null) {
-	// viamigo.setNbamis(viamigo.getNbamis()+1);
-	//
-	// amisRepository.save(amis);
-	// }
-	//
-	// }
-	// HttpSession session = request.getSession();
-	// session.setAttribute("idUser", user.getId());
-	// session.setMaxInactiveInterval(3600);
-	// SecurityContextHolder.getContext().setAuthentication(
-	// new UsernamePasswordAuthenticationToken(
-	// user, null,
-	// Arrays.asList(new SimpleGrantedAuthority("FACEBOOK_USER"))));
-	//
-	// return user;
-	// }else {
-	// response.sendError(HttpServletResponse.SC_BAD_REQUEST,"error2");
-	// return null;
-	// }
-	//
-	// } else {
-	// response.sendError(HttpServletResponse.SC_BAD_REQUEST,"error");
-	// return null;
-	// }
-	//
-	// }
-
-	// @Transactional
-	// @GetMapping(path = "/{userId}/delete")
-	// public @ResponseBody void deleteId(@PathVariable int userId,
-	//
-	// HttpServletRequest request, HttpServletResponse response)
-	// throws IOException {
-	// Integer adminId = (int)request.getSession().getAttribute("idUser");
-	// ;
-	// // This returns a JSON or XML with the users
-	// if (adminId != null) {
-	// Utilisateur admin = userRepository.findById(adminId);
-	// if (admin.getRole().equals("Admin")) {
-	// userRepository.deleteById(userId);
-	// } else {
-	// response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-	// }
-	// }
-	//
-	// }
-
-	//
-	// @GetMapping(path = "/{userId}/recherche/nom-prenom")
-	// public @ResponseBody List<JSONObject> getfindUserNomPrenom(
-	// @PathVariable int userId, @RequestParam String nom,
-	// HttpServletRequest request,
-	// HttpServletResponse response) throws IOException {
-	// List<JSONObject> reponse = new ArrayList<JSONObject>();
-	//
-	// if (nom!="" && nom!="null"){
-	// // This returns a JSON or XML with the users
-	// Iterable<Utilisateur> list =
-	// userRepository.findByNomContainingOrPrenomContaining(nom, nom);
-	//
-	// Utilisateur user = new Utilisateur();
-	// for (Utilisateur utilisateur : list) {
-	// JSONObject element = new JSONObject();
-	// element.put("utilisateur", utilisateur);
-	// int isDemand = 0;
-	// for (DemandesAmis demande : utilisateur.getDemandesAmis()) {
-	// if (demande.getFrom().getId() == userId) {
-	// int demandeId = demande.getId();
-	// element.put("demandeId", demandeId);
-	// isDemand = 1;
-	// break;
-	// }
-	// }
-	// element.put("isdemande", isDemand);
-	//
-	// reponse.add(element);
-	// }
-	//
-	// return reponse;
-	//
-	// }else{
-	// return reponse;
-	// }
-	//
-	//
-	// }
-
-	@GetMapping(path = "/logged")
-	public @ResponseBody Utilisateur logged(HttpServletRequest request,
+	@GetMapping(path = "/fil-actu")
+	public @ResponseBody ModelAndView logged(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
-		String email = auth.getName(); // get logged in username
-		Utilisateur user = userRepository.findByEmail(email);
-		response.sendError(HttpServletResponse.SC_OK);
-		return user;
+		String login = auth.getName(); 
+
+		return null;
 
 	}
 
@@ -363,110 +65,46 @@ public class UserController {
 		return model;
 	}
 
-	@GetMapping("/delete")
-	public @ResponseBody void deleteUser(@RequestParam long id,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		if (request.getSession().getAttribute("idUser").equals(id)) {
-			userRepository.delete(id);
-		} else {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-		}
+	
+//
+//	@RequestMapping("/{userId}/")
+//	public @ResponseBody Utilisateur dataUtilisateur(@PathVariable int userId,
+//			HttpServletRequest request, HttpServletResponse response)
+//			throws IOException {
+//		Utilisateur user = userRepository.findById(userId);
+//		if (user != null) {
+//			return user;
+//
+//		} else {
+//			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+//					"Access Denied");
+//			return null;
+//		}
+//
+//	}
 
-	}
+//	@RequestMapping("/{userId}/infos")
+//	public @ResponseBody JSONObject infoUser(@PathVariable int userId,
+//			HttpServletRequest request, HttpServletResponse response)
+//			throws IOException {
+//		Utilisateur user = userRepository.findById(userId);
+//		if (user != null) {
+//
+//			JSONObject reponse = new JSONObject();
+//			reponse.put("email", user.getEmail());
+//			reponse.put("nom", user.getNom());
+//			reponse.put("prenom", user.getPrenom());
+//			;
+//
+//			return reponse;
+//		}
+//
+//		else {
+//			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+//					"Access Denied");
+//			return null;
+//		}
+//	}
 
-	@RequestMapping("/{userId}/")
-	public @ResponseBody Utilisateur dataUtilisateur(@PathVariable int userId,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		Utilisateur user = userRepository.findById(userId);
-		if (user != null) {
-			return user;
-
-		} else {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-					"Access Denied");
-			return null;
-		}
-
-	}
-
-	@RequestMapping("/{userId}/infos")
-	public @ResponseBody JSONObject infoUser(@PathVariable int userId,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		Utilisateur user = userRepository.findById(userId);
-		if (user != null) {
-
-			JSONObject reponse = new JSONObject();
-			reponse.put("email", user.getEmail());
-			reponse.put("nom", user.getNom());
-			reponse.put("prenom", user.getPrenom());
-			;
-
-			return reponse;
-		}
-
-		else {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-					"Access Denied");
-			return null;
-		}
-	}
-
-	@RequestMapping("/{userId}/activites")
-	public @ResponseBody Set<Contenus> activites(@PathVariable int userId,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		Utilisateur user = userRepository.findById(userId);
-		if (user != null) {
-			return user.getActivite();
-		} else {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-					"Access Denied");
-			return null;
-		}
-
-	}
-
-	@RequestMapping("/{userId}/modifier/email")
-	public @ResponseBody String modifEmail(@PathVariable int userId,
-			@RequestParam String email, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		Utilisateur user = userRepository.findById(userId);
-		if (user != null) {// &&
-							// request.getSession().getAttribute("idUser").equals(userId))
-							// {
-			user.setEmail(email);
-			userRepository.save(user);
-			return "fait";
-		} else {
-
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-					"Access Denied");
-			return null;
-		}
-	}
-
-	@RequestMapping("/{userId}/modifier/nom-prenom")
-	public @ResponseBody String modifNomPrenom(@PathVariable int userId,
-			@RequestParam String nom, @RequestParam String prenom,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		Utilisateur user = userRepository.findById(userId);
-		if (user != null) {// &&
-							// request.getSession().getAttribute("idUser").equals(userId))
-							// {
-			user.setNom(nom);
-			user.setPrenom(prenom);
-			userRepository.save(user);
-			return "fait";
-		} else {
-
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-					"Access Denied");
-			return null;
-		}
-	}
 
 }
