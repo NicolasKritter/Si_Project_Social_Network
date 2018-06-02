@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hello.model.EcoleRepository;
@@ -31,9 +32,10 @@ public class LDAPSynchroController {
 	@Autowired
 	private PasswordEncoder keydEncoder;
 	
-	@RequestMapping("/ajouter-utilisateur/{schoolKey}")
+	@RequestMapping("/ajouter-utilisateur")
 	
-	public @ResponseBody int addUsers( @RequestBody  List<Utilisateur> userList,@PathVariable String schoolKey) {
+	public @ResponseBody int addUsers( @RequestBody  List<Utilisateur> userList,@RequestParam String schoolKey) {
+		if (userList.size()==0) {return 0;}
 		Utilisateur first = userList.get(0);
 		if (schoolKey!=null && first!=null) {
 			Ecole ecole = ecoleRepository.findById(first.getEcole().getId());
