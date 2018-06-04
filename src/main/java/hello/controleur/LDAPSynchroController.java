@@ -35,6 +35,7 @@ public class LDAPSynchroController {
 	@RequestMapping("/ajouter-utilisateur")
 	
 	public @ResponseBody int addUsers( @RequestBody  List<Utilisateur> userList,@RequestParam String schoolKey) {
+		
 		if (userList.size()==0) {return 0;}
 		Utilisateur first = userList.get(0);
 		if (schoolKey!=null && first!=null) {
