@@ -1,7 +1,6 @@
 package hello.controleur;
 
 import java.io.IOException;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,17 +11,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import hello.model.ContenusRepository;
 import hello.model.UtilisateurRepository;
 import hello.tables.Contenus;
 import hello.tables.Utilisateur;
-import net.minidev.json.JSONObject;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path = "/utilisateur", method = { RequestMethod.POST,
@@ -34,18 +31,22 @@ public class UserController {
 				// the data
 	private UtilisateurRepository userRepository;
 
-	
+	@Autowired 
+	private ContenusRepository contenusRepository;
 
 
 	@GetMapping(path = "/fil-actu")
 	public @ResponseBody ModelAndView logged(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-
+		ModelAndView model = new ModelAndView("fil-actu");
 		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		String login = auth.getName(); 
-
-		return null;
+				.getAuthentication(); 
+		Utilisateur utilisateur = userRepository.findByLogin(auth.getName());
+		Iterable<Contenus> list = contenusRepository.findByEcoleId(utilisateur.getEcole().getId());
+		model.addObject("nom", utilisateur.getNom());
+		model.addObject("prenom",utilisateur.getPrenom());
+		model.addObject("list", list);
+ 		return model;
 
 	}
 

@@ -138,7 +138,7 @@ public class Contenus implements Serializable {
      *
      * @return the current value of commentaire
      */
-    public String getCommentaire() {
+    public String getContent() {
         return content;
     }
 
@@ -147,7 +147,7 @@ public class Contenus implements Serializable {
      *
      * @param aCommentaire the new value for commentaire
      */
-    public void setCommentaire(String content) {
+    public void setContent(String content) {
        this.content = content;
     }
 

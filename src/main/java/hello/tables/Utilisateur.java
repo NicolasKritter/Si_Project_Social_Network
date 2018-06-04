@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity(name="utilisateur")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "login")
 public class Utilisateur implements Serializable {
 
     /**
@@ -42,14 +42,15 @@ public class Utilisateur implements Serializable {
 
 
 	/** Primary key. */
-    protected static final String PK = "id";
+    protected static final String PK = "login";
 
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(unique=true, nullable=false, precision=10)
-    private int id;
+//    @Id
+//    @GeneratedValue(strategy=GenerationType.IDENTITY)
+//    @Column(unique=true, nullable=false, precision=10)
+//    private int id;
   
+    @Id
     @Column(nullable=false, length=40)
     private String login;
 
@@ -101,9 +102,9 @@ public class Utilisateur implements Serializable {
      *
      * @return the current value of id
      */
-    public int getId() {
-        return id;
-    }
+//    public int getId() {
+//        return id;
+//    }
 
 
     
@@ -112,9 +113,9 @@ public class Utilisateur implements Serializable {
      *
      * @param aId the new value for id
      */
-    public void setId(int aId) {
-        id = aId;
-    }
+//    public void setId(int aId) {
+//        id = aId;
+//    }
 
 
 
@@ -239,7 +240,7 @@ public class Utilisateur implements Serializable {
             return false;
         }
         Utilisateur that = (Utilisateur) other;
-        if (this.getId() != that.getId()) {
+        if (this.getLogin() != that.getLogin()) {
             return false;
         }
         return true;
@@ -267,7 +268,7 @@ public class Utilisateur implements Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer("[Utilisateur |");
-        sb.append(" id=").append(getId());
+        sb.append(" id=").append(getLogin());
         sb.append("]");
         return sb.toString();
     }
@@ -279,7 +280,7 @@ public class Utilisateur implements Serializable {
      */
     public Map<String, Object> getPrimaryKey() {
         Map<String, Object> ret = new LinkedHashMap<String, Object>(6);
-        ret.put("id", new Integer(getId()));
+        ret.put("id", new Integer(getLogin()));
         return ret;
     }
 

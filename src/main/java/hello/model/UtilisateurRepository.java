@@ -8,16 +8,16 @@ import org.springframework.data.repository.query.Param;
 
 import hello.tables.Utilisateur;
 
-public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long>   {
+public interface UtilisateurRepository extends JpaRepository<Utilisateur, String>   {
 
 	Utilisateur findByLogin(String login);
-	Utilisateur findById(int id);
+//	Utilisateur findById(int id);
 	Iterable<Utilisateur> findByNomAndPrenom(String nom,String prenom);
 	Iterable<Utilisateur> findByNomContainingOrPrenomContaining(String nom,String prenom);
 
-	void deleteById(int id);
+	void deleteByLogin(String id);
 	
-	Set <Utilisateur> findByIdIn(int[] ids);
+//	Set <Utilisateur> findByIdIn(int[] ids);
 	
-	Set<Utilisateur> findByIdIn(Set<Integer> listeAmis);
+	Set<Utilisateur> findByLoginIn(Set<String> listLogin);
 }
