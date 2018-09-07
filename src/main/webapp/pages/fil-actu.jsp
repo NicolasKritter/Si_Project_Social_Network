@@ -15,7 +15,7 @@
 			<p>Bonjour ${prenom} ${nom }</p>
 		</div>
 		<c:forEach var="listValue" items="${list}">
-				<div class="box" id="box2">
+			<div class="box" id="box2">
 			<p> ${listValue.titre}</p>
 			<p>${listValue.content}</p>
 		</div>
